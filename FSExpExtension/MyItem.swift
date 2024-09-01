@@ -27,18 +27,18 @@ final class MyItem: FSUnaryItem {
     
     init(name: String) {
         self.name = name
-        attributes.fileid = id
+        attributes.fileID = id
         attributes.size = 0
         attributes.allocSize = 0
-        attributes.bsdFlags = 0
-        
+        attributes.flags = 0
+
         var timespec = timespec()
         timespec_get(&timespec, TIME_UTC)
         
-        attributes.setAddedTime(&timespec)
-        attributes.setBirthTime(&timespec)
-        attributes.setChangeTime(&timespec)
-        attributes.setModifyTime(&timespec)
+        attributes.addedTime = (timespec)
+        attributes.birthTime = (timespec)
+        attributes.changeTime = (timespec)
+        attributes.modifyTime = (timespec)
     }
     
     func addItem(_ item: MyItem) {

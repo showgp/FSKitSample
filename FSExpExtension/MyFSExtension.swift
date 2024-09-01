@@ -1,6 +1,6 @@
 //
-//  FSExpExtension.swift
-//  FSExpExtension
+//  MyFSExtension.swift
+//  MyFSExtension
 //
 //  Created by Khaos Tian on 6/13/24.
 //
@@ -11,7 +11,7 @@ import FSKit
 
 @main
 final class MyFSExtension: UnaryFilesystemExtension {
-    
+
     var filesystem: MyFS {
         NSLog("🐛 Called filesystems")
 
@@ -20,78 +20,61 @@ final class MyFSExtension: UnaryFilesystemExtension {
 }
 
 final class MyFS: FSUnaryFileSystem, FSUnaryFileSystemOperations, FSManageableResourceMaintenanceOperations {
-    
+
     static let shared = MyFS()
-    
+
     override init() {
         super.init()
-        
+
         containerState = .active
         NSLog("🐛 Meow")
     }
-    
-    func load(
-        _ resource: FSResource,
-        options: FSTaskOptionsBundle,
-        replyHandler reply: @escaping (FSVolume?, (any Error)?) -> Void
-    ) {
+
+    func load(_ resource: FSResource, options: [String], replyHandler reply: @escaping (FSVolume?, (any Error)?) -> Void) {
         NSLog("🐛 Load: \(resource), options: \(options)")
-        
-        let volume = MyVolume()
-        
+        let volumeID = FSVolume.Identifier(uuid: UUID(uuidString: "BC74BFE1-3ADA-4489-A4F2-B432A08DD00B")!)
+        let volumeName = FSFileName(string: "TestV1")
+        let volume = MyVolume(volumeID: volumeID, volumeName: volumeName)
+
         reply(volume, nil)
+
     }
-    
+
     func didFinishLoading() {
         NSLog("🐛 DidFinishLoading")
     }
-    
-    func check(
-        withParameters parameters: [String],
-        connection: FSMessageConnection,
-        taskID: UUID,
-        replyHandler reply: @escaping (Progress?, (any Error)?) -> Void
-    ) {
+
+    func checkFileSystem(parameters: [String], connection: FSMessageConnection, taskID: UUID, replyHandler: @escaping (Progress?, (any Error)?) -> Void) {
         NSLog("🐛 Check")
 
         let progress = Progress(totalUnitCount: 1)
         progress.completedUnitCount = 1
-        reply(progress, nil)
+        replyHandler(progress, nil)
+
     }
-    
-    func format(
-        withParameters parameters: [String],
-        connection: FSMessageConnection,
-        taskID: UUID,
-        replyHandler reply: @escaping (Progress?, (any Error)?) -> Void
-    ) {
+
+    func formatFileSystem(parameters: [String], connection: FSMessageConnection, taskID: UUID, replyHandler: @escaping (Progress?, (any Error)?) -> Void) {
         NSLog("🐛 Format")
 
         let progress = Progress(totalUnitCount: 1)
         progress.completedUnitCount = 1
-        reply(progress, nil)
+        replyHandler(progress, nil)
+
     }
-    
+
     enum FSError: Error {
         case internalError
     }
 }
 
 extension MyFS: FSBlockDeviceOperations {
-    
-    func probeResource(
-        _ resource: FSResource,
-        replyHandler reply: @escaping (FSMatchResult, String?, FSContainerIdentifier?, (any Error)?) -> Void
-    ) {
+    func probeResource(_ resource: FSResource, replyHandler: @escaping (FSProbeResult?, (any Error)?) -> Void) {
         NSLog("🐛 Probe Resource: \(resource)")
-        
+
         let id = FSContainerIdentifier(uuid: UUID(uuidString: "51D4A02B-AC65-4D61-95FF-EA8F939E79C8")!)
-        
-        reply(
-            .usable,
-            "TestVol",
-            id,
-            nil
-        )
+
+        let res = FSProbeResult(result: .usable, name: "TestVol", containerID: id)
+
+        replyHandler(res, nil)
     }
 }

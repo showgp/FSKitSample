@@ -17,11 +17,8 @@ final class ViewModel {
     private(set) var modules: [FSModuleIdentity] = []
     
     init() {
-        client = FSClient()
-        client?.installedExtensions { modules, errors in
-            if let modules {
-                self.modules = modules
-            }
+        FSClient.installedExtensions { modules, err in
+            self.modules = modules ?? []
         }
     }
 }

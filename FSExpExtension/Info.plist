@@ -4,21 +4,21 @@
 <dict>
 	<key>EXAppExtensionAttributes</key>
 	<dict>
+		<key>EXExtensionPointIdentifier</key>
+		<string>com.apple.fskit.fsmodule</string>
+		<key>EXExtensionPrincipalClass</key>
+		<string>$(PRODUCT_MODULE_NAME).MyFSExtension</string>
 		<key>FSActivateOptionSyntax</key>
 		<dict>
 			<key>shortOptions</key>
 			<string>u:g:m:o:</string>
 		</dict>
+		<key>FSShortName</key>
+		<string>MyFS</string>
 		<key>FSSupportsBlockResources</key>
 		<true/>
 		<key>FSSupportsPathURLs</key>
 		<false/>
-		<key>EXExtensionPointIdentifier</key>
-		<string>com.apple.fskit.fsmodule</string>
-		<key>EXExtensionPrincipalClass</key>
-		<string>$(PRODUCT_MODULE_NAME).MyFSExtension</string>
-		<key>FSShortName</key>
-		<string>MyFS</string>
 		<key>FSSupportsServerURLs</key>
 		<false/>
 	</dict>
